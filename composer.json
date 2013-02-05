@@ -1,0 +1,15 @@
+{
+	"name": "Foowie/DataGrid",
+	"type": "library",
+	"description": "DataGrid for Nette Framework",
+	"keywords": ["nette", "datagrid"],
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"require": {
+		"nette/nette": "@dev"
+	},
+	"autoload": {
+		"psr-0": {
+			"DataGrid": "src/"
+		}
+	}	
+}

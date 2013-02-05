@@ -1,0 +1,9 @@
+{snippet}
+	{foreach $flashes as $flash}
+		<div class="flash {$flash->type}">{$flash->message}</div>
+	{/foreach}
+	{control $control begin}
+	{control $control errors}
+	{control $control body}
+	{control $control end}
+{/snippet}
