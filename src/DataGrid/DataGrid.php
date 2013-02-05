@@ -1006,7 +1006,7 @@ class DataGrid extends \Nette\Application\UI\Control implements \ArrayAccess
 	 * @param  string  date format
 	 * @return \DataGrid\Columns\DateColumn
 	 */
-	public function addDateColumn($name, $caption = NULL, $format = '%x')
+	public function addDateColumn($name, $caption = NULL, $format = 'Y-m-d H:i')
 	{
 		return $this[$name] = new Columns\DateColumn($caption, $format);
 	}

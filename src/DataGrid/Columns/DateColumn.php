@@ -20,10 +20,10 @@ class DateColumn extends TextColumn
 	/**
 	 * Date column constructor.
 	 * @param  string  column's textual caption
-	 * @param  string  date format supported by PHP strftime()
+	 * @param  string  date format supported by PHP date()
 	 * @return void
 	 */
-	public function __construct($caption = NULL, $format = '%x')
+	public function __construct($caption = NULL, $format = 'Y-m-d H:i')
 	{
 		parent::__construct($caption);
 		$this->format = $format;
@@ -42,7 +42,7 @@ class DateColumn extends TextColumn
 		$value = parent::formatContent($value, $data);
 
 		$value = is_numeric($value) ? (int) $value : ($value instanceof \DateTime ? $value->format('U') : strtotime($value));
-		return strftime($this->format, $value);
+		return date($this->format, $value);
 	}
 
 
