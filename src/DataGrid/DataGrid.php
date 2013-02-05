@@ -741,7 +741,7 @@ class DataGrid extends \Nette\Application\UI\Control implements \ArrayAccess
 	public function getRenderer()
 	{
 		if ($this->renderer === NULL) {
-			$this->renderer = new Renderers\Conventional;
+			$this->renderer = new Renderers\Conventional\Renderer();
 		}
 		return $this->renderer;
 	}

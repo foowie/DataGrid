@@ -1,6 +1,6 @@
 <?php
 
-namespace DataGrid\Renderers;
+namespace DataGrid\Renderers\Conventional;
 use Nette, DataGrid,
 	Nette\Utils\Html,
 	DataGrid\Columns,
@@ -15,7 +15,7 @@ use Nette, DataGrid,
  * @example    http://addons.nette.org/datagrid
  * @package    Nette\Extras\DataGrid
  */
-class Conventional extends Nette\Object implements IRenderer
+class Renderer extends Nette\Object implements \DataGrid\Renderers\IRenderer
 {
 	/** @var array  of HTML tags */
 	public $wrappers = array(
