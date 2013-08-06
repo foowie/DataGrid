@@ -1,7 +1,10 @@
 <?php
 
 namespace DataGrid\Columns;
-use DataGrid, Nette\Web\Html, DataGrid\DataSources\IDataSource;
+
+use DataGrid,
+	Nette\Utils\Html,
+	DataGrid\DataSources\IDataSource;
 
 /**
  * Representation of positioning data grid column, that provides moving entries up or down.
@@ -12,8 +15,8 @@ use DataGrid, Nette\Web\Html, DataGrid\DataSources\IDataSource;
  * @example    http://addons.nette.org/datagrid
  * @package    Nette\Extras\DataGrid
  */
-class PositionColumn extends NumericColumn
-{
+class PositionColumn extends NumericColumn {
+
 	/** @var array */
 	public $moves = array();
 
@@ -29,7 +32,6 @@ class PositionColumn extends NumericColumn
 	/** @var int */
 	protected $max;
 
-
 	/**
 	 * Checkbox column constructor.
 	 * @param  string  column's textual caption
@@ -38,8 +40,7 @@ class PositionColumn extends NumericColumn
 	 * @param  bool    use ajax? (add class self::$ajaxClass into generated link)
 	 * @return void
 	 */
-	public function __construct($caption = NULL, $destination = NULL, array $moves = NULL, $useAjax = TRUE)
-	{
+	public function __construct($caption = NULL, $destination = NULL, array $moves = NULL, $useAjax = TRUE) {
 		parent::__construct($caption, 0);
 
 		$this->useAjax = $useAjax;
@@ -61,29 +62,26 @@ class PositionColumn extends NumericColumn
 		$this->monitor('Datagrid\DataGrid');
 	}
 
-
 	/**
 	 * This method will be called when the component (or component's parent)
 	 * becomes attached to a monitored object. Do not call this method yourself.
 	 * @param  Nette\IComponent
 	 * @return void
 	 */
-	protected function attached($dataGrid)
-	{
-		if ($dataGrid instanceof DataGrid\DataGrid) {
-			$dataSource = clone $dataGrid->dataSource;
-			$this->min = $this->max = 0;
-			$first = $dataSource->sort($this->getName(), IDataSource::ASCENDING)->reduce(1)->fetch();
-			if (count($first) > 0)
-				$this->min = (int) $first[0][$this->getName()];
-			$last = $dataSource->sort($this->getName(), IDataSource::DESCENDING)->reduce(1)->fetch();
-			if (count($last) > 0)
-				$this->max = (int) $first[0][$this->getName()];
-		}
+	protected function attached($dataGrid) {
+//		if ($dataGrid instanceof DataGrid\DataGrid) {
+//			$dataSource = clone $dataGrid->dataSource;
+//			$this->min = $this->max = 0;
+//			$first = $dataSource->sort($this->getName(), IDataSource::ASCENDING)->reduce(1)->fetch();
+//			if (count($first) > 0)
+//				$this->min = (int) $first[0][$this->getName()];
+//			$last = $dataSource->sort($this->getName(), IDataSource::DESCENDING)->reduce(1)->fetch();
+//			if (count($last) > 0)
+//				$this->max = (int) $first[0][$this->getName()];
+//		}
 
 		parent::attached($dataGrid);
 	}
-
 
 	/**
 	 * Formats cell's content.
@@ -91,14 +89,15 @@ class PositionColumn extends NumericColumn
 	 * @param  \DibiRow|array
 	 * @return string
 	 */
-	public function formatContent($value, $data = NULL)
-	{
-		$control = $this->getDataGrid()->lookup('Nette\Application\Control', TRUE);
-		$uplink = $control->link($this->destination, array('key' => $value, 'dir' => 'up'));
-		$downlink = $control->link($this->destination, array('key' => $value, 'dir' => 'down'));
+	public function formatContent($value, $data = NULL) {
+		$control = $this->getDataGrid()->lookup('Nette\Application\UI\Control', TRUE);
+		$keyName = $this->getDataGrid()->getDataSource()->getKeyName();
 
-		$up = Html::el('a')->title($this->moves['up'])->href($uplink)->add(Html::el('span')->class('up'));
-		$down = Html::el('a')->title($this->moves['down'])->href($downlink)->add(Html::el('span')->class('down'));
+		$uplink = $control->link($this->destination, array('key' => $value, 'dir' => 'up', 'rowId' => $data[$keyName]));
+		$downlink = $control->link($this->destination, array('key' => $value, 'dir' => 'down', 'rowId' => $data[$keyName]));
+
+		$up = Html::el('a')->title($this->moves['up'])->href($uplink)->add(Html::el('span')->class('up')->add($this->moves['up']));
+		$down = Html::el('a')->title($this->moves['down'])->href($downlink)->add(Html::el('span')->class('down')->add($this->moves['down']));
 
 		if ($this->useAjax) {
 			$up->class(self::$ajaxClass);
@@ -106,16 +105,17 @@ class PositionColumn extends NumericColumn
 		}
 
 		// disable top up & top bottom links
-		if ($value == $this->min) {
-			$up->href(NULL);
-			$up->class('inactive');
-		}
-		if ($value == $this->max) {
-			$down->href(NULL);
-			$down->class('inactive');
-		}
+//		if ($value == $this->min) {
+//			$up->href(NULL);
+//			$up->class('inactive');
+//		}
+//		if ($value == $this->max) {
+//			$down->href(NULL);
+//			$down->class('inactive');
+//		}
 
-		$positioner = Html::el('span')->class('positioner')->add($up)->add($down);
-		return $positioner . $value;
+		$positioner = Html::el('span')->class('positioner')->add($up)->add(' ')->add($down);
+		return $positioner/* . $value */;
 	}
+
 }
