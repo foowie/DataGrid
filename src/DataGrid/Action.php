@@ -41,7 +41,7 @@ class Action extends \Nette\ComponentModel\Component implements IAction
 	 * @note   presenter or action and must be ended with exclamation mark (!)
 	 *
 	 * @param  string  textual title
-	 * @param  string  textual link destination
+	 * @param  string|array  textual link destination or array($link, 'key' => 'value', ...)
 	 * @param  Nette\Web\Html    element which is added to a generated link
 	 * @param  bool    use ajax? (add class self::$ajaxClass into generated link)
 	 * @param  mixed   generate link with argument? (if yes you can specify name of parameter
@@ -72,17 +72,23 @@ class Action extends \Nette\ComponentModel\Component implements IAction
 	 */
 	public function generateLink(array $args = NULL)
 	{
+		$customArgs = $this->destination;
+		if(is_array($customArgs)) {
+			$destination = array_shift($customArgs);
+			$args = array_merge($args === null ? array() : $args, $customArgs);
+		} else {
+			$destination = $customArgs;
+		}
+		
 		$dataGrid = $this->lookup('DataGrid\DataGrid', TRUE);
 		$control = $dataGrid->lookup('\Nette\Application\UI\Control', TRUE);
 
-		switch ($this->key) {
-		case self::WITHOUT_KEY:
-			$link = $control->link($this->destination); break;
-		case self::WITH_KEY:
-		default:
+		if($this->key != self::WITHOUT_KEY) {
 			$key = $this->key == NULL || is_bool($this->key) ? $dataGrid->keyName : $this->key;
-			$link = $control->link($this->destination, array($key => $args[$dataGrid->keyName])); break;
+			$args = array_merge(array($key => $args[$dataGrid->keyName]), $args);
 		}
+		
+		$link = $control->link($destination, $args);
 
 		$this->html->href($link);
 	}
