@@ -74,7 +74,7 @@ class TextColumn extends Column {
 
 		$dataSource = $this->getDataGrid()->getDataSource();
 		if ($this->getFilter() instanceof \DataGrid\Filters\SelectboxFilter && $this->getFilter()->getFormControl()->areKeysUsed()) {
-			$dataSource->filter($this->getDataColumnName(), '=', $value);
+			$dataSource->filter($this->name, '=', $value);
 		} else if (strpos($value, '*') !== FALSE) {
 			$dataSource->filter($this->name, 'LIKE', $value); //asterisks are converted internally
 		} elseif ($value === 'NULL' || $value === 'NOT NULL') {
